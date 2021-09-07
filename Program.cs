@@ -25,6 +25,7 @@ namespace Farm
             finally
             {
                 bot.Stop();
+                Log.Information("bot is stopped!");
             }
         }
 

@@ -1,5 +1,12 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Serilog;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace Farm
 {
@@ -8,10 +15,12 @@ namespace Farm
         private static Bot bot;
 
         private readonly TelegramBotClient client;
+        private readonly CancellationTokenSource cancellationTokenSource;
 
         private Bot()
         {
             client = new TelegramBotClient(Settings.API_TOKEN);
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         public static Bot GetInstance()
@@ -25,41 +34,51 @@ namespace Farm
 
         public void Start()
         {
-
+            client.StartReceiving(
+                new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync),
+                cancellationTokenSource.Token);
         }
 
         public void Stop()
         {
+            cancellationTokenSource.Cancel();
         }
 
-        // private void BotOnMessage(object sender, MessageEventArgs e)
-        // {
-        //     LogMessageFromChat(e.Message);
-
-        //     if (IsMessageTypeAllowed(e.Message.Type))
-        //     {
-        //         string inMessage = e.Message.Text.ToLower();
-        //         string outMessage;
-
-        //         if (IsChatAllowed(e.Message.Chat.Id)
-        //             && IsLoginAllowed(inMessage))
-        //         {
-        //             string userData = DataProvider.GetUserData(inMessage);
-        //             outMessage = userData;
-        //         }
-        //         else
-        //         {
-        //             outMessage = string.Format("Hello {0}!", e.Message.Chat.FirstName);
-        //         }
-        //         SendMessageToChat(outMessage, e.Message.Chat.Id);
-
-        //         Log.Information(string.Format("Respoce from bot:\r\n{0}", outMessage));
-        //     }
-        // }
-
-        private void SendMessageToChat(string message, long chatId)
+        private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            client.SendTextMessageAsync(chatId, message);
+            var ErrorMessage = exception switch
+            {
+                ApiRequestException apiRequestException => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+                _                                       => exception.ToString()
+            };
+
+            Console.WriteLine(ErrorMessage);
+            return Task.CompletedTask;
+        }
+
+        private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            if (update.Type != UpdateType.Message
+                || update.Message.Type != MessageType.Text)
+            {
+                return;
+            }
+
+            LogMessageFromChat(update.Message);
+            long chatId = update.Message.Chat.Id;
+            string responce = "You said:\n" + update.Message.Text;
+
+            await botClient.SendTextMessageAsync(chatId, responce);
+
+            Log.Information($"Respoce from bot:\r\n{responce}");
+        }
+
+        private static void LogMessageFromChat(Message message)
+        {
+            Log.Information(string.Format("From: {0} {1}\r\nCaht ID: {2}\r\nMessage: {3}",
+                            message.Chat.FirstName, message.Chat.LastName,
+                            message.Chat.Id,
+                            message.Text));
         }
     }
 }
