@@ -7,6 +7,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Farm
 {
@@ -65,12 +66,30 @@ namespace Farm
             }
 
             LogMessageFromChat(update.Message);
-            long chatId = update.Message.Chat.Id;
-            string responce = "You said:\n" + update.Message.Text;
 
-            await botClient.SendTextMessageAsync(chatId, responce);
+            if (update.Message.Text.Equals("/start"))
+            {
+                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
+                    new KeyboardButton[][]
+                    {
+                        new KeyboardButton[] { "Press" }
+                    },
+                    resizeKeyboard: true);
+                
 
-            Log.Information($"Respoce from bot:\r\n{responce}");
+                await botClient.SendTextMessageAsync(
+                    chatId: update.Message.Chat.Id,
+                    text: "Press to roll the dice",
+                    replyMarkup: replyKeyboardMarkup
+                );
+            }
+
+            // long chatId = update.Message.Chat.Id;
+            // string responce = "You said:\n" + update.Message.Text;
+
+            // await botClient.SendTextMessageAsync(chatId, responce);
+
+            // Log.Information($"Respoce from bot:\r\n{responce}");
         }
 
         private static void LogMessageFromChat(Message message)
