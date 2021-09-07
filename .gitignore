@@ -1,4 +1,4 @@
 bin
 obj
 .vscode
-Settings.cs
+log*
