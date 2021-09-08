@@ -69,27 +69,35 @@ namespace Farm
 
             if (update.Message.Text.Equals("/start"))
             {
+                string responce = "Press to roll the dice";
                 ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                     new KeyboardButton[][]
                     {
                         new KeyboardButton[] { "Press" }
                     },
                     resizeKeyboard: true);
-                
 
                 await botClient.SendTextMessageAsync(
                     chatId: update.Message.Chat.Id,
-                    text: "Press to roll the dice",
+                    text: responce,
                     replyMarkup: replyKeyboardMarkup
                 );
+                Log.Information($"Respoce from bot:\r\n{responce}");
             }
 
-            // long chatId = update.Message.Chat.Id;
-            // string responce = "You said:\n" + update.Message.Text;
-
-            // await botClient.SendTextMessageAsync(chatId, responce);
-
-            // Log.Information($"Respoce from bot:\r\n{responce}");
+            if (update.Message.Text.Equals("Press"))
+            {
+                string responce = "Dice are rolled";
+                await botClient.SendTextMessageAsync(
+                    chatId: update.Message.Chat.Id,
+                    text: responce
+                );
+                Message message1 = await botClient.SendStickerAsync(
+                chatId: update.Message.Chat.Id,
+                sticker: "https://github.com/TelegramBots/book/raw/master/src/docs/sticker-fred.webp"
+                );
+                Log.Information($"Respoce from bot:\r\n{responce}");
+            }
         }
 
         private static void LogMessageFromChat(Message message)
