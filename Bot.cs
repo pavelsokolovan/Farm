@@ -14,6 +14,7 @@ namespace Farm
     public class Bot
     {
         private static Bot bot;
+        private FarmDice farmDice;
 
         private readonly TelegramBotClient client;
         private readonly CancellationTokenSource cancellationTokenSource;
@@ -22,6 +23,7 @@ namespace Farm
         {
             client = new TelegramBotClient(Settings.API_TOKEN);
             cancellationTokenSource = new CancellationTokenSource();
+            farmDice = new FarmDice();
         }
 
         public static Bot GetInstance()
@@ -82,20 +84,22 @@ namespace Farm
                     text: responce,
                     replyMarkup: replyKeyboardMarkup
                 );
+                farmDice = new FarmDice();
                 Log.Information($"Respoce from bot:\r\n{responce}");
             }
 
             if (update.Message.Text.Equals("Press"))
             {
-                string responce = "Dice are rolled";
-                await botClient.SendTextMessageAsync(
+                var dice = farmDice.RollDice();
+                await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    text: responce
+                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item1 + ".webp"
                 );
-                Message message1 = await botClient.SendStickerAsync(
-                chatId: update.Message.Chat.Id,
-                sticker: "https://github.com/TelegramBots/book/raw/master/src/docs/sticker-fred.webp"
+                await botClient.SendStickerAsync(
+                    chatId: update.Message.Chat.Id,
+                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item2 + ".webp"
                 );
+                string responce = $"Dice are rolled: {dice.Item1} and {dice.Item2}";
                 Log.Information($"Respoce from bot:\r\n{responce}");
             }
         }
