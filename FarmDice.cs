@@ -13,33 +13,33 @@ namespace Farm
         {
             dice1 = new []
             {            
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Goat,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Goat,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Pig,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Fox,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Goat,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Cow
             };
 
             dice2 = new []
             {                  
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Horse,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Pig,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Goat,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Pig,
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Wolf,      
-                Enimal.Hen,
+                Enimal.Chick,
                 Enimal.Goat
             };
 
@@ -56,7 +56,7 @@ namespace Farm
 
         public enum Enimal
         {
-            Hen,
+            Chick,
             Goat,
             Pig,
             Cow,

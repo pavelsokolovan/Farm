@@ -71,11 +71,11 @@ namespace Farm
 
             if (update.Message.Text.Equals("/start"))
             {
-                string responce = "Press to roll the dice";
+                string responce = "Roll the dice";
                 ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(
                     new KeyboardButton[][]
                     {
-                        new KeyboardButton[] { "Press" }
+                        new KeyboardButton[] { "Roll" }
                     },
                     resizeKeyboard: true);
 
@@ -88,23 +88,23 @@ namespace Farm
                 Log.Information($"Respoce from bot:\r\n{responce}");
             }
 
-            if (update.Message.Text.Equals("Press"))
+            if (update.Message.Text.Equals("Roll"))
             {
                 var dice = farmDice.Roll();
                 Log.Information($"Dice1: {dice.Item1}, Dice2: {dice.Item2}");
 
-                string stickerUrl1 = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Wolf.webp";
-                Log.Information($"Sticker Url 1: {stickerUrl1}");
+                string stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item1 + ".webp";
+                Log.Information($"Sticker Url 1: {stickerUrl}");
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: stickerUrl1
+                    sticker: stickerUrl
                 );
 
-                string stickerUrl2 = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Hen.webp";
-                Log.Information($"Sticker Url 2: {stickerUrl2}");
+                stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item2 + ".webp";
+                Log.Information($"Sticker Url 2: {stickerUrl}");
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Hen.webp"
+                    sticker: stickerUrl
                 );
 
                 string responce = $"Dice are rolled: {dice.Item1} and {dice.Item2}";
