@@ -1,4 +1,5 @@
 using System;
+using Serilog;
 
 namespace Farm
 {
@@ -45,9 +46,12 @@ namespace Farm
             random = new Random();
         }
 
-        public (Enimal, Enimal) RollDice()
+        public (Enimal, Enimal) Roll()
         {
-            return (dice1[random.Next(13)], dice2[random.Next(13)]);
+            int diceIndex1 = random.Next(dice1.Length - 1);
+            int diceIndex2 = random.Next(dice2.Length - 1);
+            Log.Information($"FarmDice.Roll()\ndiceIndex1: {diceIndex1}\ndiceIndex2: {diceIndex2}");
+            return (dice1[diceIndex1], dice2[diceIndex2]);
         }
 
         public enum Enimal
