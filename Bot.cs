@@ -91,16 +91,22 @@ namespace Farm
             if (update.Message.Text.Equals("Press"))
             {
                 var dice = farmDice.RollDice();
+                Log.Information($"Dice1: {dice.Item1}, Dice2: {dice.Item2}");
+
+                string stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item1 + ".webp";
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item1 + ".webp"
+                    sticker: stickerUrl
                 );
+
+                stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item2 + ".webp";
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/" + dice.Item2 + ".webp"
+                    sticker: stickerUrl
                 );
+
                 string responce = $"Dice are rolled: {dice.Item1} and {dice.Item2}";
-                Log.Information($"Respoce from bot:\r\n{responce}");
+                Log.Information($"Respoce from bot: {responce}");
             }
         }
 
