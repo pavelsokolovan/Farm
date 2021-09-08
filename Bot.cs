@@ -93,18 +93,18 @@ namespace Farm
                 var dice = farmDice.Roll();
                 Log.Information($"Dice1: {dice.Item1}, Dice2: {dice.Item2}");
 
-                string stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Wolf.webp";
-                Log.Information($"Sticker Url 1: {stickerUrl}");
+                string stickerUrl1 = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Wolf.webp";
+                Log.Information($"Sticker Url 1: {stickerUrl1}");
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: stickerUrl
+                    sticker: stickerUrl1
                 );
 
-                stickerUrl = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Hen.webp";
-                Log.Information($"Sticker Url 2: {stickerUrl}");
+                string stickerUrl2 = "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Hen.webp";
+                Log.Information($"Sticker Url 2: {stickerUrl2}");
                 await botClient.SendStickerAsync(
                     chatId: update.Message.Chat.Id,
-                    sticker: stickerUrl
+                    sticker: "https://github.com/pavelsokolovan/Farm/raw/main/Stickers/Hen.webp"
                 );
 
                 string responce = $"Dice are rolled: {dice.Item1} and {dice.Item2}";
